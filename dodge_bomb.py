@@ -2,7 +2,6 @@ import random
 import sys
 import pygame as pg
 
-
 WIDTH, HEIGHT = 1600, 900
 
 delta = {  # 練習３：押下キーと移動量の辞書
@@ -14,7 +13,6 @@ delta = {  # 練習３：押下キーと移動量の辞書
     # pg.K_1:(+5,-5),
     # pg.K_2:(-5,+5),
     # pg.K_3:(+5,+5)
-
     # pg.K_UP and pg.K_LEFT:(-5,-5),
     # pg.K_UP and pg.K_RIGHT:(+5,-5),
     # pg.K_DOWN and pg.K_LEFT:(-5,+5),
@@ -56,8 +54,8 @@ def main():
     tmr = 0
     kk_direction = 0  # 初期向きは右, 追加の変数と画像をロード
 
-    # Rectが画面内にあるかどうかを判定する関数
-    def is_inside_screen(rect):
+    
+    def is_inside_screen(rect):  # Rectが画面内にあるかどうかを判定する関数
         return (
             0 <= rect.left <= WIDTH and
             0 <= rect.right <= WIDTH and
@@ -65,17 +63,15 @@ def main():
             0 <= rect.bottom <= HEIGHT
         )
 
-    # 爆弾のリストを生成
-    bomb_imgs = []
+    
+    bomb_imgs = []  # 爆弾のリストを生成
     for r in range(1, 11):
         bb_img = pg.Surface((20 * r, 20 * r), pg.SRCALPHA)
         pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
         bomb_imgs.append(bb_img)
-    
-    clock = pg.time.Clock()
 
-    # こうかとんと爆弾の初期位置の設定
-    kk_rect = kk_img.get_rect(topleft=(900, 400))
+    clock = pg.time.Clock()
+    kk_rect = kk_img.get_rect(topleft=(900, 400))  # こうかとんと爆弾の初期位置の設定
     bomb_rect = bomb_imgs[0].get_rect(topleft=(random.randint(0, WIDTH - bomb_imgs[0].get_width()), random.randint(0, HEIGHT - bomb_imgs[0].get_height())))
 
     while True:
@@ -92,8 +88,6 @@ def main():
                 pg.time.wait(1000)
                 return
         
-        
-
         if kk_rct.colliderect(bb_rct):
             print("Game Over")
             return
@@ -105,9 +99,8 @@ def main():
             if key_lst[k]:  # キーが押されたら
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-#------------------------------------------------
                 
-                if k == pg.K_RIGHT:
+                if k == pg.K_RIGHT:  # 右なら0
                     kk_direction = 0
                 elif k == pg.K_UP:
                     kk_direction = 1
@@ -124,15 +117,11 @@ def main():
                 elif k == (pg.K_DOWN and pg.K_RIGHT):
                     kk_direction = 7
                 
-
-                
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
 
-        # kk_directionに応じて画像を回転して表示
-
-        if kk_direction == 0:  # 右向き
+        if kk_direction == 0:  # kk_directionに応じて画像を回転して表示 # 右向き
             rotated_kk_img = pg.transform.flip(kk_img, True, False)
         elif kk_direction == 1:  # 上向き
             rotated_kk_img = pg.transform.flip(pg.transform.rotate(kk_img, 90), False, True)
@@ -148,8 +137,6 @@ def main():
             rotated_kk_img = pg.transform.flip(pg.transform.rotate(kk_img, -45), False, True)
         elif kk_direction == 7:  # 左下斜め
             rotated_kk_img = pg.transform.rotate(kk_img, 45, True, False)
-        
-
 
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
@@ -168,7 +155,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
 
 if __name__ == "__main__":
     pg.init()
